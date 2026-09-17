@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAB / LinTS — аналіз ключових метрик Q3</title>
+<style>
+  :root {
+    color-scheme: light;
+    --background: #ffffff; --foreground: #172033;
+    --muted-foreground: #667085; --border: #d9dee8;
+    --popover: #ffffff; --popover-foreground: #172033;
+    --viz-series-1: #4472c4; --viz-series-2: #d26a32;
+    --viz-series-3: #a44d9e; --viz-series-4: #287f71;
+    --viz-series-5: #8a6d1f; --font-size-base: 16px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--background); color: var(--foreground); font: 400 var(--font-size-base)/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  body.locked { overflow: hidden; }
+  body.locked > :not(.password-gate) { display: none !important; }
+  .password-gate { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 24px; background: linear-gradient(135deg,#f6f8fb,#eaf8f1); }
+  .password-card { width: min(420px,100%); padding: 30px; border: 1px solid var(--border); border-radius: 22px; background: #fff; box-shadow: 0 12px 36px rgba(31,53,77,.12); text-align: center; }
+  .password-brand { color: #20a464; font-size: 30px; font-weight: 900; letter-spacing: -.04em; }
+  .password-card h2 { margin: 8px 0; font-size: 28px; }
+  .password-card p { margin: 0 0 20px; color: var(--muted-foreground); }
+  .password-card input { width: 100%; padding: 13px 14px; border: 1px solid var(--border); border-radius: 12px; font: inherit; outline: none; }
+  .password-card input:focus { border-color: #20a464; box-shadow: 0 0 0 3px #eaf8f1; }
+  .password-card button { width: 100%; margin-top: 12px; padding: 13px 14px; border: 0; border-radius: 12px; background: #20a464; color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+  .password-error { min-height: 20px; margin-top: 10px; color: #d14343; font-size: 14px; }
+  main { width: min(1180px, calc(100% - 32px)); margin: 28px auto 48px; }
+  .report-title { margin: 0; font-size: clamp(25px, 4vw, 38px); font-weight: 500; }
+  .report-subtitle { color: var(--muted-foreground); margin: 4px 0 20px; }
+  .findings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 30px; }
+  .finding { border-top: 3px solid var(--viz-series-2); padding-top: 10px; }
+  .finding h2 { font-size: 18px; font-weight: 500; margin: 0 0 6px; }
+  .finding p { margin: 0; }
+  .caveat { color: var(--muted-foreground); margin: 12px 0 30px; }
+  .viz-row { display: flex; flex-wrap: wrap; }
+  .text-small { font-size: 13px; } .text-muted { color: var(--muted-foreground); }
+  @media (max-width: 760px) { .findings { grid-template-columns: 1fr; } main { width: min(100% - 20px, 1180px); } }
+</style>
+</head>
+<body class="locked">
+<div class="password-gate" id="passwordGate">
+  <form class="password-card" id="passwordForm">
+    <div class="password-brand">COMFY</div>
+    <h2>Захищена сторінка</h2>
+    <p>Введіть пароль, щоб переглянути MAB / LinTS аналіз.</p>
+    <input id="passwordInput" type="password" placeholder="Пароль" autocomplete="current-password" autofocus>
+    <button type="submit">Відкрити</button>
+    <div class="password-error" id="passwordError" aria-live="polite"></div>
+  </form>
+</div>
+<main>
+  <header>
+    <h1 class="report-title">MAB / LinTS: Q3 до 15 вересня</h1>
+    <p class="report-subtitle">Daily results тестової групи та timeline ключових змін</p>
+  </header>
+  <section class="findings" aria-label="Основні висновки">
+    <article class="finding">
+      <h2>8%: сигнал у бік обігу</h2>
+      <p>За 7 днів після 17.07 додатковий обіг був на 35% вищим, але додатковий дохід — на 15% нижчим. Конверсія майже не змінилась: −0,03 в.п.</p>
+    </article>
+    <article class="finding">
+      <h2>Після повернення Samsung</h2>
+      <p>У 7-денному вікні після 04.08 конверсія зросла на 0,11 в.п., додатковий обіг — на 23%, додатковий дохід — на 35% проти попередніх 7 днів.</p>
+    </article>
+    <article class="finding">
+      <h2>10%: стабілізація ще не завершена</h2>
+      <p>19–25.08 конверсія була на 0,22 в.п. вищою, середній додатковий обіг — на 6% вищим, але додатковий дохід — на 18% нижчим за 10–16.08.</p>
+    </article>
+    <article class="finding">
+      <h2>Конверсія частково вирівнюється</h2>
+      <p>Після позначки 07.09 конверсія спочатку знизилась до 1,55% 10.09, а за 11–15.09 відновилась до 2,08% проти 1,73% за 07–10.09. Семиденне середнє на 15.09 повернулося до 1,95%, але це ще нижче за кінець серпня.</p>
+    </article>
+  </section>
+  <p class="caveat">Це описові порівняння сусідніх 7-денних вікон. Одночасні зміни моделі, структури EXP25, видимості персональної ціни, coverage та денна сезонність не дозволяють приписати різницю лише одній події без контрольної групи або довшого post-period.</p>
+<div id="mab-lints-q3">
+  <h2>Ключові метрики MAB / LinTS у Q3</h2>
+  <div class="text-small text-muted">Щоденні значення та 7-денне ковзне середнє · 01.07–15.09.2026</div>
+  <div class="viz-row legend" aria-label="Позначення графіка">
+    <button type="button" class="series-toggle" data-series="raw" aria-pressed="true"><span class="swatch raw"></span>День</button>
+    <button type="button" class="series-toggle" data-series="avg" aria-pressed="true"><span class="swatch avg"></span>Середнє за 7 днів</button>
+    <span class="event-key"><span class="event-line discount"></span>Знижка</span>
+    <span class="event-key"><span class="event-line model"></span>Модель / фічі</span>
+    <span class="event-key"><span class="event-line coverage"></span>Coverage</span>
+    <span class="event-key"><span class="event-line stability"></span>Відстеження конверсії з 07.09</span>
+  </div>
+  <div class="plots"></div>
+  <div class="events" aria-label="Timeline подій">
+    <div><strong>E1 · 02.07</strong> Запущено EXP25_MAB_BUSINESS_SPLIT: тест розділили за бізнес-напрямами, тому склад експерименту та результат могли змінитися.</div>
+    <div><strong>E2 · 17.07</strong> Ліміт знижки піднято з 7% до 8%. Того ж дня в чаті зафіксували появу персональної ціни на головній сторінці — це могло збільшити видимість пропозицій.</div>
+    <div><strong>E3 · 27.07</strong> Дві зміни: Samsung smartphones вимкнули; неактивних 14 днів клієнтів почали виводити з експерименту і при поверненні заново розподіляти в TG/CG.</div>
+    <div><strong>E4 · 04.08</strong> Samsung smartphones повернули до персональних цін — підтверджено власником аналізу.</div>
+    <div><strong>E5 · 17.08</strong> LinTS скинули та почали навчання заново з технічною можливістю видавати знижки до 10%.</div>
+    <div><strong>E6 · 19.08</strong> Комерційне обмеження підняли до 10%; пропозиції 8–10% уже почали видаватися, але модель ще адаптувалася.</div>
+    <div><strong>E7 · 03.09</strong> Максимальний ліміт знижки зменшили з 10% до 7%. За 03–15.09 конверсія нижча за попередні 13 днів на 0,62 в.п.; причинність без контрольної групи не підтверджена.</div>
+    <div><strong>До періоду · початок червня</strong> Samsung smartphones і smartwatches вимкнули після бізнесового інциденту.</div>
+    <div><strong>Не нанесено окремою лінією</strong> «Інтерес до товару» — оцінка недавніх переглядів конкретного товару з поступовим зменшенням ваги. 27.07 її назвали другою за силою фічею, але це спостереження, а не дата запуску.</div>
+  </div>
+  <div class="tooltip" role="tooltip"></div>
+</div>
+<style>
+  #mab-lints-q3 { color: var(--foreground); position: relative; width: 100%; }
+  #mab-lints-q3 h2 { margin-bottom: 2px; }
+  #mab-lints-q3 .legend { margin: 10px 0 6px; gap: 12px; align-items: center; }
+  #mab-lints-q3 .series-toggle { appearance: none; border: 0; background: transparent; color: var(--foreground); padding: 2px 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  #mab-lints-q3 .series-toggle[aria-pressed="false"] { opacity: .42; text-decoration: line-through; }
+  #mab-lints-q3 .swatch { display: inline-block; width: 22px; height: 0; border-top: 2px solid; }
+  #mab-lints-q3 .swatch.raw { border-color: var(--viz-series-1); opacity: .55; }
+  #mab-lints-q3 .swatch.avg { border-color: var(--viz-series-2); border-top-width: 3px; }
+  #mab-lints-q3 .event-key { display: inline-flex; align-items: center; gap: 5px; }
+  #mab-lints-q3 .event-line { width: 0; height: 15px; border-left: 3px solid; display: inline-block; }
+  #mab-lints-q3 .event-line.discount { border-color: var(--viz-series-3); }
+  #mab-lints-q3 .event-line.model { border-color: var(--viz-series-4); }
+  #mab-lints-q3 .event-line.coverage { border-color: var(--viz-series-5); }
+  #mab-lints-q3 .event-line.stability { border-color: var(--viz-series-6); border-left-style: dashed; }
+  #mab-lints-q3 .stability-mark { stroke: var(--viz-series-6); stroke-width: 2; stroke-dasharray: 6 4; }
+  #mab-lints-q3 .stability-label { fill: var(--foreground); font-weight: 500; }
+  #mab-lints-q3 .plot-wrap { width: 100%; margin-top: 8px; }
+  #mab-lints-q3 .panel-title { margin: 0 0 2px 66px; font-weight: 500; }
+  #mab-lints-q3 svg { display: block; width: 100%; overflow: visible; }
+  #mab-lints-q3 svg text { fill: var(--foreground); font-size: 12px; }
+  #mab-lints-q3 .axis text { fill: var(--muted-foreground); }
+  #mab-lints-q3 .axis path, #mab-lints-q3 .axis line { stroke: var(--border); }
+  #mab-lints-q3 .grid line { stroke: var(--border); stroke-opacity: .55; }
+  #mab-lints-q3 .grid path { display: none; }
+  #mab-lints-q3 [data-chart-frame] { fill: transparent; stroke: var(--border); }
+  #mab-lints-q3 .raw-path { fill: none; stroke: var(--viz-series-1); stroke-width: 1.4; opacity: .55; }
+  #mab-lints-q3 .avg-path { fill: none; stroke: var(--viz-series-2); stroke-width: 2.8; }
+  #mab-lints-q3 .zero-line { stroke: var(--foreground); stroke-opacity: .45; stroke-dasharray: 4 4; }
+  #mab-lints-q3 .event-mark { stroke-width: 1.4; stroke-dasharray: 3 3; opacity: .85; }
+  #mab-lints-q3 .event-mark.discount { stroke: var(--viz-series-3); }
+  #mab-lints-q3 .event-mark.model { stroke: var(--viz-series-4); }
+  #mab-lints-q3 .event-mark.coverage { stroke: var(--viz-series-5); }
+  #mab-lints-q3 .event-label { font-weight: 500; paint-order: stroke; stroke: var(--background); stroke-width: 4px; stroke-linejoin: round; }
+  #mab-lints-q3 .hover-guide { stroke: var(--foreground); stroke-opacity: .45; pointer-events: none; }
+  #mab-lints-q3 .hover-dot { stroke: var(--background); stroke-width: 2px; pointer-events: none; }
+  #mab-lints-q3 .events { margin: 12px 0 0 66px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 18px; }
+  #mab-lints-q3 .tooltip { position: absolute; pointer-events: none; display: none; z-index: 5; background: var(--popover); color: var(--popover-foreground); border: 1px solid var(--border); padding: 8px 10px; max-width: 240px; }
+  #mab-lints-q3 .tip-row { display: flex; justify-content: space-between; gap: 18px; }
+  @media (max-width: 540px) {
+    #mab-lints-q3 .events { grid-template-columns: 1fr; margin-left: 0; }
+    #mab-lints-q3 .panel-title { margin-left: 58px; }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(() => {
+  const root = document.getElementById('mab-lints-q3');
+  const rows = [{"d":"2026-07-01","c":3.056,"t":3.292,"i":396.6},{"d":"2026-07-02","c":2.528,"t":2.021,"i":113.6},{"d":"2026-07-03","c":2.476,"t":0.858,"i":54.5},{"d":"2026-07-04","c":2.523,"t":0.65,"i":9.9},{"d":"2026-07-05","c":2.332,"t":0.672,"i":152.3},{"d":"2026-07-06","c":2.291,"t":0.417,"i":50.5},{"d":"2026-07-07","c":2.325,"t":0.803,"i":-77.0},{"d":"2026-07-08","c":2.367,"t":3.034,"i":386.7},{"d":"2026-07-09","c":2.152,"t":3.072,"i":427.3},{"d":"2026-07-10","c":2.522,"t":1.385,"i":174.7},{"d":"2026-07-11","c":2.739,"t":1.146,"i":69.8},{"d":"2026-07-12","c":2.612,"t":1.144,"i":169.3},{"d":"2026-07-13","c":2.845,"t":1.406,"i":229.8},{"d":"2026-07-14","c":2.364,"t":1.46,"i":187.9},{"d":"2026-07-15","c":2.419,"t":0.516,"i":-18.5},{"d":"2026-07-16","c":2.507,"t":1.592,"i":276.9},{"d":"2026-07-17","c":2.421,"t":1.369,"i":113.1},{"d":"2026-07-18","c":2.597,"t":2.211,"i":123.9},{"d":"2026-07-19","c":2.57,"t":1.69,"i":195.0},{"d":"2026-07-20","c":2.571,"t":0.711,"i":-128.5},{"d":"2026-07-21","c":2.546,"t":2.572,"i":293.3},{"d":"2026-07-22","c":2.639,"t":1.052,"i":138.2},{"d":"2026-07-23","c":2.462,"t":2.092,"i":185.3},{"d":"2026-07-24","c":2.558,"t":2.098,"i":210.6},{"d":"2026-07-25","c":2.699,"t":1.792,"i":202.8},{"d":"2026-07-26","c":2.759,"t":3.512,"i":438.0},{"d":"2026-07-27","c":2.662,"t":2.889,"i":47.2},{"d":"2026-07-28","c":2.651,"t":1.838,"i":147.3},{"d":"2026-07-29","c":2.756,"t":3.567,"i":373.9},{"d":"2026-07-30","c":2.501,"t":1.843,"i":104.9},{"d":"2026-07-31","c":2.565,"t":1.229,"i":29.9},{"d":"2026-08-01","c":2.759,"t":1.637,"i":163.4},{"d":"2026-08-02","c":2.581,"t":2.378,"i":314.8},{"d":"2026-08-03","c":2.532,"t":1.756,"i":137.9},{"d":"2026-08-04","c":2.816,"t":0.67,"i":-35.7},{"d":"2026-08-05","c":2.962,"t":1.931,"i":158.8},{"d":"2026-08-06","c":2.956,"t":4.655,"i":557.6},{"d":"2026-08-07","c":3.09,"t":2.097,"i":125.5},{"d":"2026-08-08","c":2.844,"t":3.461,"i":397.0},{"d":"2026-08-09","c":2.584,"t":1.954,"i":126.7},{"d":"2026-08-10","c":2.014,"t":2.723,"i":384.8},{"d":"2026-08-11","c":1.97,"t":2.314,"i":92.7},{"d":"2026-08-12","c":2.524,"t":1.494,"i":159.8},{"d":"2026-08-13","c":2.71,"t":1.821,"i":161.3},{"d":"2026-08-14","c":2.587,"t":2.812,"i":380.5},{"d":"2026-08-15","c":2.814,"t":2.42,"i":236.3},{"d":"2026-08-16","c":2.551,"t":2.039,"i":378.4},{"d":"2026-08-17","c":2.479,"t":-0.017,"i":-212.7},{"d":"2026-08-18","c":2.632,"t":1.731,"i":122.8},{"d":"2026-08-19","c":2.774,"t":2.351,"i":162.9},{"d":"2026-08-20","c":2.72,"t":3.594,"i":461.3},{"d":"2026-08-21","c":2.274,"t":2.8,"i":411.2},{"d":"2026-08-22","c":2.747,"t":2.992,"i":296.5},{"d":"2026-08-23","c":2.732,"t":2.259,"i":29.8},{"d":"2026-08-24","c":2.627,"t":1.118,"i":-116.5},{"d":"2026-08-25","c":2.739,"t":1.396,"i":217.4},{"d":"2026-08-26","c":2.76,"t":1.154,"i":80.4},{"d":"2026-08-27","c":2.444,"t":2.927,"i":605.6},{"d":"2026-08-28","c":2.793,"t":2.587,"i":427.5},{"d":"2026-08-29","c":2.753,"t":1.935,"i":276.2},{"d":"2026-08-30","c":2.561,"t":1.329,"i":248.7},{"d":"2026-08-31","c":2.344,"t":2.173,"i":255.8},{"d":"2026-09-01","c":2.017,"t":2.256,"i":265.8},{"d":"2026-09-02","c":2.096,"t":1.586,"i":183.2},{"d":"2026-09-03","c":1.902,"t":0.759,"i":-80.1},{"d":"2026-09-04","c":1.815,"t":1.64,"i":288.9},{"d":"2026-09-05","c":1.966,"t":1.695,"i":287.5},{"d":"2026-09-06","c":1.902,"t":2.377,"i":136.3},{"d":"2026-09-07","c":1.833,"t":0.997,"i":164.4},{"d":"2026-09-08","c":1.908,"t":2.186,"i":135.5},{"d":"2026-09-09","c":1.655,"t":0.978,"i":-103.1},{"d":"2026-09-10","c":1.547,"t":0.803,"i":15.8},{"d":"2026-09-11","c":1.97,"t":1.211,"i":94.7},{"d":"2026-09-12","c":2.2,"t":1.573,"i":312.1},{"d":"2026-09-13","c":2.133,"t":1.216,"i":144.4},{"d":"2026-09-14","c":1.95,"t":1.143,"i":182.0},{"d":"2026-09-15","c":2.183,"t":0.802,"i":61.8}];
+  const parse = d3.utcParse('%Y-%m-%d');
+  rows.forEach((r, idx) => { r.date = parse(r.d); r.index = idx; });
+  const metrics = [
+    {key:'c', title:'Конверсія', unit:'%', format:v => d3.format('.2f')(v) + '%'},
+    {key:'t', title:'Додатковий обіг', unit:'млн грн', format:v => d3.format('.2f')(v) + ' млн грн'},
+    {key:'i', title:'Додатковий дохід', unit:'тис. грн', format:v => d3.format(',.0f')(v).replaceAll(',', ' ') + ' тис. грн'}
+  ];
+  const events = [
+    {id:'E1', d:'2026-07-02', type:'model'}, {id:'E2', d:'2026-07-17', type:'discount'},
+    {id:'E3', d:'2026-07-27', type:'coverage'}, {id:'E4', d:'2026-08-04', type:'coverage'},
+    {id:'E5', d:'2026-08-17', type:'model'}, {id:'E6', d:'2026-08-19', type:'discount'},
+    {id:'E7', d:'2026-09-03', type:'discount'}
+  ].map(e => ({...e, date:parse(e.d)}));
+  rows.forEach((r, i) => metrics.forEach(m => {
+    const start = Math.max(0, i - 6);
+    r[m.key + '7'] = d3.mean(rows.slice(start, i + 1), x => x[m.key]);
+  }));
+  const plots = root.querySelector('.plots');
+  metrics.forEach(m => {
+    const wrap = document.createElement('section'); wrap.className = 'plot-wrap';
+    wrap.innerHTML = `<div class="panel-title">${m.title}</div><svg role="img"><title>${m.title} за днями</title><desc>Щоденне значення, семиденне ковзне середнє та події timeline.</desc></svg>`;
+    plots.appendChild(wrap);
+  });
+  const state = {raw:true, avg:true};
+  const tooltip = root.querySelector('.tooltip');
+  function draw() {
+    const narrow = root.clientWidth < 540;
+    root.querySelectorAll('.plot-wrap').forEach((wrap, panelIndex) => {
+      const m = metrics[panelIndex], svg = d3.select(wrap.querySelector('svg'));
+      svg.selectAll('*:not(title):not(desc)').remove();
+      const width = Math.max(320, wrap.clientWidth), height = narrow ? 250 : 225;
+      const margin = {top: panelIndex === 0 ? 28 : 10, right: 18, bottom: 46, left: narrow ? 58 : 66};
+      const iw = width-margin.left-margin.right, ih=height-margin.top-margin.bottom;
+      svg.attr('viewBox',`0 0 ${width} ${height}`).attr('height',height);
+      const x=d3.scaleUtc().domain(d3.extent(rows,d=>d.date)).range([margin.left,margin.left+iw]);
+      const vals=rows.flatMap(d=>[d[m.key],d[m.key+'7']]);
+      let [lo,hi]=d3.extent(vals); const pad=(hi-lo||1)*.12; lo-=pad; hi+=pad;
+      if(m.key==='i'){lo=Math.min(lo,0);hi=Math.max(hi,0)}
+      const y=d3.scaleLinear().domain([lo,hi]).nice().range([margin.top+ih,margin.top]);
+      svg.append('rect').attr('data-chart-frame','').attr('x',margin.left).attr('y',margin.top).attr('width',iw).attr('height',ih);
+      svg.append('g').attr('class','grid').attr('transform',`translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-iw).tickFormat(''));
+      if(m.key==='i') svg.append('line').attr('class','zero-line').attr('x1',margin.left).attr('x2',margin.left+iw).attr('y1',y(0)).attr('y2',y(0));
+      events.forEach((e, j) => {
+        const ex=x(e.date);
+        svg.append('line').attr('class',`event-mark ${e.type}`).attr('x1',ex).attr('x2',ex).attr('y1',margin.top).attr('y2',margin.top+ih);
+        if(panelIndex===0) svg.append('text').attr('class','event-label').attr('x',Math.max(margin.left+10,Math.min(margin.left+iw-10,ex))).attr('y',margin.top-8-(j%2)*12).attr('text-anchor','middle').text(e.id);
+      });
+      if(panelIndex===0) {
+        const trackingDate=parse('2026-09-07'), tx=x(trackingDate);
+        svg.append('line').attr('class','stability-mark').attr('x1',tx).attr('x2',tx).attr('y1',margin.top).attr('y2',margin.top+ih);
+        svg.append('text').attr('class','stability-label').attr('x',Math.min(margin.left+iw-4,tx+5)).attr('y',margin.top+15).attr('text-anchor','start').text('07.09 · відстеження');
+      }
+      const line=k=>d3.line().x(d=>x(d.date)).y(d=>y(d[k]))(rows);
+      svg.append('path').attr('class','raw-path').attr('d',line(m.key)).style('display',state.raw?null:'none');
+      svg.append('path').attr('class','avg-path').attr('d',line(m.key+'7')).style('display',state.avg?null:'none');
+      const tickCount=narrow?4:7;
+      svg.append('g').attr('class','axis').attr('transform',`translate(0,${margin.top+ih})`).call(d3.axisBottom(x).ticks(tickCount).tickFormat(d3.utcFormat('%d.%m')));
+      svg.append('g').attr('class','axis').attr('transform',`translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(4));
+      svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',margin.left+iw/2).attr('y',height-5).attr('text-anchor','middle').text('Дата');
+      svg.append('text').attr('class','axis-title').attr('data-axis','y').attr('transform',`translate(14,${margin.top+ih/2}) rotate(-90)`).attr('text-anchor','middle').text(m.unit);
+      const guide=svg.append('line').attr('class','hover-guide').attr('y1',margin.top).attr('y2',margin.top+ih).style('display','none');
+      const dotRaw=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--viz-series-1)').style('display','none');
+      const dotAvg=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--viz-series-2)').style('display','none');
+      svg.append('rect').attr('data-chart-hit','').attr('data-chart-hover-overlay','cross-series').attr('x',margin.left).attr('y',margin.top).attr('width',iw).attr('height',ih).attr('fill','transparent')
+        .on('pointermove', function(event){
+          const [px]=d3.pointer(event,this), dt=x.invert(px), idx=d3.bisector(d=>d.date).center(rows,dt), r=rows[idx], gx=x(r.date);
+          guide.attr('x1',gx).attr('x2',gx).style('display',null);
+          dotRaw.attr('cx',gx).attr('cy',y(r[m.key])).style('display',state.raw?null:'none');
+          dotAvg.attr('cx',gx).attr('cy',y(r[m.key+'7'])).style('display',state.avg?null:'none');
+          tooltip.innerHTML=`<strong>${d3.utcFormat('%d.%m.%Y')(r.date)}</strong>${state.raw?`<div class="tip-row"><span>День</span><span>${m.format(r[m.key])}</span></div>`:''}${state.avg?`<div class="tip-row"><span>7 днів</span><span>${m.format(r[m.key+'7'])}</span></div>`:''}`;
+          tooltip.style.display='block';
+          const rootBox=root.getBoundingClientRect(), tipBox=tooltip.getBoundingClientRect();
+          let left=event.clientX-rootBox.left+12; if(left+tipBox.width>rootBox.width) left-=tipBox.width+24;
+          tooltip.style.left=left+'px'; tooltip.style.top=(event.clientY-rootBox.top-tipBox.height-8)+'px';
+        }).on('pointerleave',()=>{guide.style('display','none');dotRaw.style('display','none');dotAvg.style('display','none');tooltip.style.display='none';});
+    });
+  }
+  root.querySelectorAll('.series-toggle').forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.series; state[k]=!state[k]; btn.setAttribute('aria-pressed',String(state[k])); draw();
+  }));
+  new ResizeObserver(draw).observe(root);
+  draw();
+})();
+</script>
+</main>
+<script>
+(() => {
+  const gate = document.getElementById('passwordGate');
+  const form = document.getElementById('passwordForm');
+  const input = document.getElementById('passwordInput');
+  const error = document.getElementById('passwordError');
+  if (sessionStorage.getItem('mabLintsAccess') === 'granted') unlock();
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (input.value === 'comfyone') {
+      sessionStorage.setItem('mabLintsAccess', 'granted');
+      unlock();
+    } else {
+      error.textContent = 'Невірний пароль';
+      input.select();
+    }
+  });
+  function unlock() {
+    document.body.classList.remove('locked');
+    gate.remove();
+  }
+})();
+</script>
+</body>
+</html>
