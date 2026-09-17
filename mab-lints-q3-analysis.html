@@ -79,8 +79,9 @@
   <h2>Ключові метрики MAB / LinTS у Q3</h2>
   <div class="text-small text-muted">Щоденні значення та 7-денне ковзне середнє · 01.07–15.09.2026</div>
   <div class="viz-row legend" aria-label="Позначення графіка">
-    <button type="button" class="series-toggle" data-series="raw" aria-pressed="true"><span class="swatch raw"></span>День</button>
+    <button type="button" class="series-toggle" data-series="raw" aria-pressed="true"><span class="swatch raw"></span>Тестова група · день</button>
     <button type="button" class="series-toggle" data-series="avg" aria-pressed="true"><span class="swatch avg"></span>Середнє за 7 днів</button>
+    <button type="button" class="series-toggle" data-series="ttl" aria-pressed="true"><span class="swatch ttl"></span>Конверсія TTL</button>
     <span class="event-key"><span class="event-line discount"></span>Знижка</span>
     <span class="event-key"><span class="event-line model"></span>Модель / фічі</span>
     <span class="event-key"><span class="event-line coverage"></span>Coverage</span>
@@ -101,14 +102,15 @@
   <div class="tooltip" role="tooltip"></div>
 </div>
 <style>
-  #mab-lints-q3 { color: var(--foreground); position: relative; width: 100%; }
+  #mab-lints-q3 { --mab-purple: #7c3aed; --ttl-orange: #ff6b00; color: var(--foreground); position: relative; width: 100%; }
   #mab-lints-q3 h2 { margin-bottom: 2px; }
   #mab-lints-q3 .legend { margin: 10px 0 6px; gap: 12px; align-items: center; }
   #mab-lints-q3 .series-toggle { appearance: none; border: 0; background: transparent; color: var(--foreground); padding: 2px 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
   #mab-lints-q3 .series-toggle[aria-pressed="false"] { opacity: .42; text-decoration: line-through; }
   #mab-lints-q3 .swatch { display: inline-block; width: 22px; height: 0; border-top: 2px solid; }
-  #mab-lints-q3 .swatch.raw { border-color: var(--viz-series-1); opacity: .55; }
-  #mab-lints-q3 .swatch.avg { border-color: var(--viz-series-2); border-top-width: 3px; }
+  #mab-lints-q3 .swatch.raw { border-color: var(--mab-purple); opacity: .45; }
+  #mab-lints-q3 .swatch.avg { border-color: var(--mab-purple); border-top-width: 3px; }
+  #mab-lints-q3 .swatch.ttl { border-color: var(--ttl-orange); border-top-width: 3px; }
   #mab-lints-q3 .event-key { display: inline-flex; align-items: center; gap: 5px; }
   #mab-lints-q3 .event-line { width: 0; height: 15px; border-left: 3px solid; display: inline-block; }
   #mab-lints-q3 .event-line.discount { border-color: var(--viz-series-3); }
@@ -126,8 +128,9 @@
   #mab-lints-q3 .grid line { stroke: var(--border); stroke-opacity: .55; }
   #mab-lints-q3 .grid path { display: none; }
   #mab-lints-q3 [data-chart-frame] { fill: transparent; stroke: var(--border); }
-  #mab-lints-q3 .raw-path { fill: none; stroke: var(--viz-series-1); stroke-width: 1.4; opacity: .55; }
-  #mab-lints-q3 .avg-path { fill: none; stroke: var(--viz-series-2); stroke-width: 2.8; }
+  #mab-lints-q3 .raw-path { fill: none; stroke: var(--mab-purple); stroke-width: 1.5; opacity: .4; }
+  #mab-lints-q3 .avg-path { fill: none; stroke: var(--mab-purple); stroke-width: 3; }
+  #mab-lints-q3 .ttl-path { fill: none; stroke: var(--ttl-orange); stroke-width: 2.6; }
   #mab-lints-q3 .zero-line { stroke: var(--foreground); stroke-opacity: .45; stroke-dasharray: 4 4; }
   #mab-lints-q3 .event-mark { stroke-width: 1.4; stroke-dasharray: 3 3; opacity: .85; }
   #mab-lints-q3 .event-mark.discount { stroke: var(--viz-series-3); }
@@ -148,7 +151,7 @@
 <script>
 (() => {
   const root = document.getElementById('mab-lints-q3');
-  const rows = [{"d":"2026-07-01","c":3.056,"t":3.292,"i":396.6},{"d":"2026-07-02","c":2.528,"t":2.021,"i":113.6},{"d":"2026-07-03","c":2.476,"t":0.858,"i":54.5},{"d":"2026-07-04","c":2.523,"t":0.65,"i":9.9},{"d":"2026-07-05","c":2.332,"t":0.672,"i":152.3},{"d":"2026-07-06","c":2.291,"t":0.417,"i":50.5},{"d":"2026-07-07","c":2.325,"t":0.803,"i":-77.0},{"d":"2026-07-08","c":2.367,"t":3.034,"i":386.7},{"d":"2026-07-09","c":2.152,"t":3.072,"i":427.3},{"d":"2026-07-10","c":2.522,"t":1.385,"i":174.7},{"d":"2026-07-11","c":2.739,"t":1.146,"i":69.8},{"d":"2026-07-12","c":2.612,"t":1.144,"i":169.3},{"d":"2026-07-13","c":2.845,"t":1.406,"i":229.8},{"d":"2026-07-14","c":2.364,"t":1.46,"i":187.9},{"d":"2026-07-15","c":2.419,"t":0.516,"i":-18.5},{"d":"2026-07-16","c":2.507,"t":1.592,"i":276.9},{"d":"2026-07-17","c":2.421,"t":1.369,"i":113.1},{"d":"2026-07-18","c":2.597,"t":2.211,"i":123.9},{"d":"2026-07-19","c":2.57,"t":1.69,"i":195.0},{"d":"2026-07-20","c":2.571,"t":0.711,"i":-128.5},{"d":"2026-07-21","c":2.546,"t":2.572,"i":293.3},{"d":"2026-07-22","c":2.639,"t":1.052,"i":138.2},{"d":"2026-07-23","c":2.462,"t":2.092,"i":185.3},{"d":"2026-07-24","c":2.558,"t":2.098,"i":210.6},{"d":"2026-07-25","c":2.699,"t":1.792,"i":202.8},{"d":"2026-07-26","c":2.759,"t":3.512,"i":438.0},{"d":"2026-07-27","c":2.662,"t":2.889,"i":47.2},{"d":"2026-07-28","c":2.651,"t":1.838,"i":147.3},{"d":"2026-07-29","c":2.756,"t":3.567,"i":373.9},{"d":"2026-07-30","c":2.501,"t":1.843,"i":104.9},{"d":"2026-07-31","c":2.565,"t":1.229,"i":29.9},{"d":"2026-08-01","c":2.759,"t":1.637,"i":163.4},{"d":"2026-08-02","c":2.581,"t":2.378,"i":314.8},{"d":"2026-08-03","c":2.532,"t":1.756,"i":137.9},{"d":"2026-08-04","c":2.816,"t":0.67,"i":-35.7},{"d":"2026-08-05","c":2.962,"t":1.931,"i":158.8},{"d":"2026-08-06","c":2.956,"t":4.655,"i":557.6},{"d":"2026-08-07","c":3.09,"t":2.097,"i":125.5},{"d":"2026-08-08","c":2.844,"t":3.461,"i":397.0},{"d":"2026-08-09","c":2.584,"t":1.954,"i":126.7},{"d":"2026-08-10","c":2.014,"t":2.723,"i":384.8},{"d":"2026-08-11","c":1.97,"t":2.314,"i":92.7},{"d":"2026-08-12","c":2.524,"t":1.494,"i":159.8},{"d":"2026-08-13","c":2.71,"t":1.821,"i":161.3},{"d":"2026-08-14","c":2.587,"t":2.812,"i":380.5},{"d":"2026-08-15","c":2.814,"t":2.42,"i":236.3},{"d":"2026-08-16","c":2.551,"t":2.039,"i":378.4},{"d":"2026-08-17","c":2.479,"t":-0.017,"i":-212.7},{"d":"2026-08-18","c":2.632,"t":1.731,"i":122.8},{"d":"2026-08-19","c":2.774,"t":2.351,"i":162.9},{"d":"2026-08-20","c":2.72,"t":3.594,"i":461.3},{"d":"2026-08-21","c":2.274,"t":2.8,"i":411.2},{"d":"2026-08-22","c":2.747,"t":2.992,"i":296.5},{"d":"2026-08-23","c":2.732,"t":2.259,"i":29.8},{"d":"2026-08-24","c":2.627,"t":1.118,"i":-116.5},{"d":"2026-08-25","c":2.739,"t":1.396,"i":217.4},{"d":"2026-08-26","c":2.76,"t":1.154,"i":80.4},{"d":"2026-08-27","c":2.444,"t":2.927,"i":605.6},{"d":"2026-08-28","c":2.793,"t":2.587,"i":427.5},{"d":"2026-08-29","c":2.753,"t":1.935,"i":276.2},{"d":"2026-08-30","c":2.561,"t":1.329,"i":248.7},{"d":"2026-08-31","c":2.344,"t":2.173,"i":255.8},{"d":"2026-09-01","c":2.017,"t":2.256,"i":265.8},{"d":"2026-09-02","c":2.096,"t":1.586,"i":183.2},{"d":"2026-09-03","c":1.902,"t":0.759,"i":-80.1},{"d":"2026-09-04","c":1.815,"t":1.64,"i":288.9},{"d":"2026-09-05","c":1.966,"t":1.695,"i":287.5},{"d":"2026-09-06","c":1.902,"t":2.377,"i":136.3},{"d":"2026-09-07","c":1.833,"t":0.997,"i":164.4},{"d":"2026-09-08","c":1.908,"t":2.186,"i":135.5},{"d":"2026-09-09","c":1.655,"t":0.978,"i":-103.1},{"d":"2026-09-10","c":1.547,"t":0.803,"i":15.8},{"d":"2026-09-11","c":1.97,"t":1.211,"i":94.7},{"d":"2026-09-12","c":2.2,"t":1.573,"i":312.1},{"d":"2026-09-13","c":2.133,"t":1.216,"i":144.4},{"d":"2026-09-14","c":1.95,"t":1.143,"i":182.0},{"d":"2026-09-15","c":2.183,"t":0.802,"i":61.8}];
+  const rows = [{"d":"2026-07-01","c":3.056,"t":3.292,"i":396.6,"ttl":1.89},{"d":"2026-07-02","c":2.528,"t":2.021,"i":113.6,"ttl":1.841},{"d":"2026-07-03","c":2.476,"t":0.858,"i":54.5,"ttl":1.769},{"d":"2026-07-04","c":2.523,"t":0.65,"i":9.9,"ttl":1.796},{"d":"2026-07-05","c":2.332,"t":0.672,"i":152.3,"ttl":1.699},{"d":"2026-07-06","c":2.291,"t":0.417,"i":50.5,"ttl":1.694},{"d":"2026-07-07","c":2.325,"t":0.803,"i":-77.0,"ttl":1.734},{"d":"2026-07-08","c":2.367,"t":3.034,"i":386.7,"ttl":1.726},{"d":"2026-07-09","c":2.152,"t":3.072,"i":427.3,"ttl":1.705},{"d":"2026-07-10","c":2.522,"t":1.385,"i":174.7,"ttl":1.749},{"d":"2026-07-11","c":2.739,"t":1.146,"i":69.8,"ttl":1.746},{"d":"2026-07-12","c":2.612,"t":1.144,"i":169.3,"ttl":1.725},{"d":"2026-07-13","c":2.845,"t":1.406,"i":229.8,"ttl":1.683},{"d":"2026-07-14","c":2.364,"t":1.46,"i":187.9,"ttl":1.591},{"d":"2026-07-15","c":2.419,"t":0.516,"i":-18.5,"ttl":1.643},{"d":"2026-07-16","c":2.507,"t":1.592,"i":276.9,"ttl":1.667},{"d":"2026-07-17","c":2.421,"t":1.369,"i":113.1,"ttl":1.637},{"d":"2026-07-18","c":2.597,"t":2.211,"i":123.9,"ttl":1.655},{"d":"2026-07-19","c":2.57,"t":1.69,"i":195.0,"ttl":1.654},{"d":"2026-07-20","c":2.571,"t":0.711,"i":-128.5,"ttl":1.671},{"d":"2026-07-21","c":2.546,"t":2.572,"i":293.3,"ttl":1.67},{"d":"2026-07-22","c":2.639,"t":1.052,"i":138.2,"ttl":1.653},{"d":"2026-07-23","c":2.462,"t":2.092,"i":185.3,"ttl":1.643},{"d":"2026-07-24","c":2.558,"t":2.098,"i":210.6,"ttl":1.618},{"d":"2026-07-25","c":2.699,"t":1.792,"i":202.8,"ttl":1.588},{"d":"2026-07-26","c":2.759,"t":3.512,"i":438.0,"ttl":1.554},{"d":"2026-07-27","c":2.662,"t":2.889,"i":47.2,"ttl":1.595},{"d":"2026-07-28","c":2.651,"t":1.838,"i":147.3,"ttl":1.598},{"d":"2026-07-29","c":2.756,"t":3.567,"i":373.9,"ttl":1.514},{"d":"2026-07-30","c":2.501,"t":1.843,"i":104.9,"ttl":1.272},{"d":"2026-07-31","c":2.565,"t":1.229,"i":29.9,"ttl":1.339},{"d":"2026-08-01","c":2.759,"t":1.637,"i":163.4,"ttl":1.621},{"d":"2026-08-02","c":2.581,"t":2.378,"i":314.8,"ttl":1.618},{"d":"2026-08-03","c":2.532,"t":1.756,"i":137.9,"ttl":1.664},{"d":"2026-08-04","c":2.816,"t":0.67,"i":-35.7,"ttl":1.717},{"d":"2026-08-05","c":2.962,"t":1.931,"i":158.8,"ttl":1.645},{"d":"2026-08-06","c":2.956,"t":4.655,"i":557.6,"ttl":1.348},{"d":"2026-08-07","c":3.09,"t":2.097,"i":125.5,"ttl":1.258},{"d":"2026-08-08","c":2.844,"t":3.461,"i":397.0,"ttl":1.22},{"d":"2026-08-09","c":2.584,"t":1.954,"i":126.7,"ttl":1.225},{"d":"2026-08-10","c":2.014,"t":2.723,"i":384.8,"ttl":1.278},{"d":"2026-08-11","c":1.97,"t":2.314,"i":92.7,"ttl":1.281},{"d":"2026-08-12","c":2.524,"t":1.494,"i":159.8,"ttl":1.283},{"d":"2026-08-13","c":2.71,"t":1.821,"i":161.3,"ttl":1.26},{"d":"2026-08-14","c":2.587,"t":2.812,"i":380.5,"ttl":1.26},{"d":"2026-08-15","c":2.814,"t":2.42,"i":236.3,"ttl":1.223},{"d":"2026-08-16","c":2.551,"t":2.039,"i":378.4,"ttl":1.216},{"d":"2026-08-17","c":2.479,"t":-0.017,"i":-212.7,"ttl":1.258},{"d":"2026-08-18","c":2.632,"t":1.731,"i":122.8,"ttl":1.28},{"d":"2026-08-19","c":2.774,"t":2.351,"i":162.9,"ttl":1.406},{"d":"2026-08-20","c":2.72,"t":3.594,"i":461.3,"ttl":1.294},{"d":"2026-08-21","c":2.274,"t":2.8,"i":411.2,"ttl":1.306},{"d":"2026-08-22","c":2.747,"t":2.992,"i":296.5,"ttl":1.27},{"d":"2026-08-23","c":2.732,"t":2.259,"i":29.8,"ttl":1.293},{"d":"2026-08-24","c":2.627,"t":1.118,"i":-116.5,"ttl":1.335},{"d":"2026-08-25","c":2.739,"t":1.396,"i":217.4,"ttl":1.504},{"d":"2026-08-26","c":2.76,"t":1.154,"i":80.4,"ttl":1.473},{"d":"2026-08-27","c":2.444,"t":2.927,"i":605.6,"ttl":1.255},{"d":"2026-08-28","c":2.793,"t":2.587,"i":427.5,"ttl":1.379},{"d":"2026-08-29","c":2.753,"t":1.935,"i":276.2,"ttl":1.398},{"d":"2026-08-30","c":2.561,"t":1.329,"i":248.7,"ttl":1.346},{"d":"2026-08-31","c":2.344,"t":2.173,"i":255.8,"ttl":1.33},{"d":"2026-09-01","c":2.017,"t":2.256,"i":265.8,"ttl":1.38},{"d":"2026-09-02","c":2.096,"t":1.586,"i":183.2,"ttl":1.436},{"d":"2026-09-03","c":1.902,"t":0.759,"i":-80.1,"ttl":1.39},{"d":"2026-09-04","c":1.815,"t":1.64,"i":288.9,"ttl":1.433},{"d":"2026-09-05","c":1.966,"t":1.695,"i":287.5,"ttl":1.491},{"d":"2026-09-06","c":1.902,"t":2.377,"i":136.3,"ttl":1.519},{"d":"2026-09-07","c":1.833,"t":0.997,"i":164.4,"ttl":1.557},{"d":"2026-09-08","c":1.908,"t":2.186,"i":135.5,"ttl":1.532},{"d":"2026-09-09","c":1.655,"t":0.978,"i":-103.1,"ttl":1.44},{"d":"2026-09-10","c":1.547,"t":0.803,"i":15.8,"ttl":1.222},{"d":"2026-09-11","c":1.97,"t":1.211,"i":94.7,"ttl":1.408},{"d":"2026-09-12","c":2.2,"t":1.573,"i":312.1,"ttl":1.449},{"d":"2026-09-13","c":2.133,"t":1.216,"i":144.4,"ttl":1.468},{"d":"2026-09-14","c":1.95,"t":1.143,"i":182.0,"ttl":1.426},{"d":"2026-09-15","c":2.183,"t":0.802,"i":61.8,"ttl":1.481}];
   const parse = d3.utcParse('%Y-%m-%d');
   rows.forEach((r, idx) => { r.date = parse(r.d); r.index = idx; });
   const metrics = [
@@ -172,7 +175,7 @@
     wrap.innerHTML = `<div class="panel-title">${m.title}</div><svg role="img"><title>${m.title} за днями</title><desc>Щоденне значення, семиденне ковзне середнє та події timeline.</desc></svg>`;
     plots.appendChild(wrap);
   });
-  const state = {raw:true, avg:true};
+  const state = {raw:true, avg:true, ttl:true};
   const tooltip = root.querySelector('.tooltip');
   function draw() {
     const narrow = root.clientWidth < 540;
@@ -184,7 +187,7 @@
       const iw = width-margin.left-margin.right, ih=height-margin.top-margin.bottom;
       svg.attr('viewBox',`0 0 ${width} ${height}`).attr('height',height);
       const x=d3.scaleUtc().domain(d3.extent(rows,d=>d.date)).range([margin.left,margin.left+iw]);
-      const vals=rows.flatMap(d=>[d[m.key],d[m.key+'7']]);
+      const vals=rows.flatMap(d=>m.key==='c'?[d[m.key],d[m.key+'7'],d.ttl]:[d[m.key],d[m.key+'7']]);
       let [lo,hi]=d3.extent(vals); const pad=(hi-lo||1)*.12; lo-=pad; hi+=pad;
       if(m.key==='i'){lo=Math.min(lo,0);hi=Math.max(hi,0)}
       const y=d3.scaleLinear().domain([lo,hi]).nice().range([margin.top+ih,margin.top]);
@@ -204,26 +207,29 @@
       const line=k=>d3.line().x(d=>x(d.date)).y(d=>y(d[k]))(rows);
       svg.append('path').attr('class','raw-path').attr('d',line(m.key)).style('display',state.raw?null:'none');
       svg.append('path').attr('class','avg-path').attr('d',line(m.key+'7')).style('display',state.avg?null:'none');
+      if(m.key==='c') svg.append('path').attr('class','ttl-path').attr('d',line('ttl')).style('display',state.ttl?null:'none');
       const tickCount=narrow?4:7;
       svg.append('g').attr('class','axis').attr('transform',`translate(0,${margin.top+ih})`).call(d3.axisBottom(x).ticks(tickCount).tickFormat(d3.utcFormat('%d.%m')));
       svg.append('g').attr('class','axis').attr('transform',`translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(4));
       svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',margin.left+iw/2).attr('y',height-5).attr('text-anchor','middle').text('Дата');
       svg.append('text').attr('class','axis-title').attr('data-axis','y').attr('transform',`translate(14,${margin.top+ih/2}) rotate(-90)`).attr('text-anchor','middle').text(m.unit);
       const guide=svg.append('line').attr('class','hover-guide').attr('y1',margin.top).attr('y2',margin.top+ih).style('display','none');
-      const dotRaw=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--viz-series-1)').style('display','none');
-      const dotAvg=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--viz-series-2)').style('display','none');
+      const dotRaw=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--mab-purple)').style('display','none');
+      const dotAvg=svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--mab-purple)').style('display','none');
+      const dotTtl=m.key==='c'?svg.append('circle').attr('class','hover-dot').attr('r',4).attr('fill','var(--ttl-orange)').style('display','none'):null;
       svg.append('rect').attr('data-chart-hit','').attr('data-chart-hover-overlay','cross-series').attr('x',margin.left).attr('y',margin.top).attr('width',iw).attr('height',ih).attr('fill','transparent')
         .on('pointermove', function(event){
           const [px]=d3.pointer(event,this), dt=x.invert(px), idx=d3.bisector(d=>d.date).center(rows,dt), r=rows[idx], gx=x(r.date);
           guide.attr('x1',gx).attr('x2',gx).style('display',null);
           dotRaw.attr('cx',gx).attr('cy',y(r[m.key])).style('display',state.raw?null:'none');
           dotAvg.attr('cx',gx).attr('cy',y(r[m.key+'7'])).style('display',state.avg?null:'none');
-          tooltip.innerHTML=`<strong>${d3.utcFormat('%d.%m.%Y')(r.date)}</strong>${state.raw?`<div class="tip-row"><span>День</span><span>${m.format(r[m.key])}</span></div>`:''}${state.avg?`<div class="tip-row"><span>7 днів</span><span>${m.format(r[m.key+'7'])}</span></div>`:''}`;
+          if(dotTtl) dotTtl.attr('cx',gx).attr('cy',y(r.ttl)).style('display',state.ttl?null:'none');
+          tooltip.innerHTML=`<strong>${d3.utcFormat('%d.%m.%Y')(r.date)}</strong>${state.raw?`<div class="tip-row"><span>День</span><span>${m.format(r[m.key])}</span></div>`:''}${state.avg?`<div class="tip-row"><span>7 днів</span><span>${m.format(r[m.key+'7'])}</span></div>`:''}${m.key==='c'&&state.ttl?`<div class="tip-row"><span>Конверсія TTL</span><span>${m.format(r.ttl)}</span></div>`:''}`;
           tooltip.style.display='block';
           const rootBox=root.getBoundingClientRect(), tipBox=tooltip.getBoundingClientRect();
           let left=event.clientX-rootBox.left+12; if(left+tipBox.width>rootBox.width) left-=tipBox.width+24;
           tooltip.style.left=left+'px'; tooltip.style.top=(event.clientY-rootBox.top-tipBox.height-8)+'px';
-        }).on('pointerleave',()=>{guide.style('display','none');dotRaw.style('display','none');dotAvg.style('display','none');tooltip.style.display='none';});
+        }).on('pointerleave',()=>{guide.style('display','none');dotRaw.style('display','none');dotAvg.style('display','none');if(dotTtl)dotTtl.style('display','none');tooltip.style.display='none';});
     });
   }
   root.querySelectorAll('.series-toggle').forEach(btn=>btn.addEventListener('click',()=>{
