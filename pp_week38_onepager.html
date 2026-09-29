@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Персональні ціни · 38 тиждень — розбір для правління</title>
+<title>Персональні ціни · вересень після прильоту — розбір для правління</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <style>
   :root{
     color-scheme: light;
     --bg:#ffffff; --panel:#ffffff; --panel2:#f6f8fa; --line:#e3e6ea;
     --txt:#1f2328; --muted:#5c6672; --accent:#0969da;
-    --test:#0969da; --ctrl:#8b949e; --good:#1a7f37; --mid:#9a6700; --bad:#cf222e;
+    --test:#0969da; --ctrl:#8b949e; --good:#1a7f37; --mid:#9a6700; --bad:#cf222e; --disc:#8250df;
   }
   *{box-sizing:border-box}
   body{margin:0;padding:22px;background:var(--bg);color:var(--txt);
@@ -19,16 +19,20 @@
   h1{font-size:21px;margin:0 0 4px}
   .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
   .lead{background:#eef4fd;border:1px solid #cfe0f7;border-left:4px solid var(--accent);
-    border-radius:8px;padding:12px 16px;font-size:14.5px;margin-bottom:18px}
+    border-radius:8px;padding:12px 16px;font-size:14.5px;margin-bottom:14px}
   .lead b{color:var(--accent)}
+  .verdict{background:#fbeaea;border:1px solid #f3c9c9;border-left:4px solid var(--bad);
+    border-radius:8px;padding:12px 16px;font-size:14px;margin-bottom:18px}
+  .verdict b{color:var(--bad)}
   .grid{display:grid;gap:12px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:18px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
   .card .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-  .card .val{font-size:26px;font-weight:650;margin:5px 0 2px;font-variant-numeric:tabular-nums}
+  .card .val{font-size:24px;font-weight:650;margin:5px 0 2px;font-variant-numeric:tabular-nums}
   .card .hint{font-size:12px;color:var(--muted)}
   .delta-bad{color:var(--bad);font-weight:600}
   .delta-warn{color:var(--mid);font-weight:600}
+  .delta-good{color:var(--good);font-weight:600}
   section{margin-top:20px}
   h2{font-size:14.5px;margin:0 0 4px;font-weight:600}
   h2 small{color:var(--muted);font-weight:400;font-size:12px;margin-left:8px}
@@ -42,7 +46,12 @@
   .causes li::before{counter-increment:c;content:counter(c);position:absolute;left:12px;top:10px;
     width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;
     font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .causes li.ctrl::before{background:var(--bad)}
+  .causes li.ext::before{background:var(--muted)}
   .causes b{color:var(--txt)}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
+  .tag-ctrl{background:#fbeaea;color:var(--bad)}
+  .tag-ext{background:#eef1f4;color:var(--muted)}
   .hl{background:#fff8e6;border:1px solid #f2dcb0;border-radius:8px;padding:11px 14px;
     font-size:13.5px;color:#4b3f2a;margin-top:12px}
   .hl b{color:var(--mid)}
@@ -53,19 +62,29 @@
   tbody tr:hover{background:var(--panel2)}
   .concl{background:#0f1b2d;color:#e7edf5;border-radius:10px;padding:14px 18px;margin-top:18px;font-size:14px}
   .concl b{color:#79b8ff}
+  .concl ul{margin:8px 0 0;padding-left:18px}
+  .concl li{margin:3px 0}
+  .method{font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:8px;padding:10px 14px;margin-top:14px}
+  .method b{color:var(--txt)}
   footer{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:#8b949e}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<h1>Персональні ціни: чому просів 38 тиждень</h1>
-<div class="sub">Тест (ЦА) vs Контроль (КГР) · дані кліку по групах, тижні 32–39, 2026 · онлайн</div>
+<h1>Персональні ціни: розбір вересня після прильоту</h1>
+<div class="sub">Тест (ЦА) vs Контроль (КГР) · MAB LinTS, товари типів PUSH/SPUSH · тижні 32–39, 2026 · онлайн</div>
 
 <div class="lead">
-  <b>Висновок:</b> просідання конверсії та додаткового обігу в тесті на 38 тижні — наслідок
-  <b>дефіциту товару після прильоту по складу 27.08</b> (асортимент на сайті 240к → 65к, −73%),
-  а не збою персоналізації. Персональна ціна не має на чому працювати, коли склад порожній.
+  <b>Головне:</b> вересневий спад — це накладання <b>трьох подій</b>: (1) прильоту по складу 27.08 (дефіцит товару),
+  (2) зниження стелі знижки 10%→5% з 3 вересня, (3) повернення стелі до 7% з 15 вересня.
+  Ринкову частину (обидві групи) тягне вниз дефіцит; <b>інкремент саме персоналізації просів через рішення зі стелею знижок і переучування MAB</b> — тобто на 60–70% це керовані нами фактори, а не збій моделі.
+</div>
+
+<div class="verdict">
+  <b>Чи вирівнюємось? Ні.</b> За весь вересень усі тренди — вниз: конверсія тесту 2.03%→1.82%, конверсія контролю 1.78%→1.54%,
+  дод. обіг тесту 1.77→0.96 млн ₴/день. Реалізована знижка після 15.09 повернулась до ~5%, але конверсія й дод. обіг ще не відреагували — MAB досі переучується.
 </div>
 
 <div class="grid kpis">
@@ -75,47 +94,47 @@
     <div class="hint"><span class="delta-bad">−28%</span> до норми (2.64%)</div>
   </div>
   <div class="card">
-    <div class="label">Дод. залучений обіг · 38 тижд.</div>
-    <div class="val">6.8 млн ₴</div>
-    <div class="hint"><span class="delta-bad">−55%</span> до норми (~15 млн ₴) · мінімум періоду</div>
+    <div class="label">Дод. обіг тесту / день</div>
+    <div class="val">1.33 млн ₴</div>
+    <div class="hint"><span class="delta-bad">−38%</span> до серпня (2.14 млн) · 2 дні у мінусі</div>
+  </div>
+  <div class="card">
+    <div class="label">Реаліз. знижка ПЦ</div>
+    <div class="val delta-warn">3.3% → 5%</div>
+    <div class="hint">3–14.09 стеля 5% · з 15.09 стеля 7%</div>
   </div>
   <div class="card">
     <div class="label">Сер. чек контролю · 38 тижд.</div>
     <div class="val delta-warn">9 069 ₴</div>
-    <div class="hint">+12% — <b>максимум за всі тижні</b></div>
-  </div>
-  <div class="card">
-    <div class="label">SKU доступні для персон.</div>
-    <div class="val">41 400</div>
-    <div class="hint"><span class="delta-bad">−36%</span> до піку (64 800)</div>
+    <div class="hint">+12% — максимум: мікс зсунувся в дороге</div>
   </div>
 </div>
 
 <section class="grid two">
   <div class="card">
-    <h2>Конверсія падає синхронно в обох групах</h2>
+    <h2>1. Ринковий удар: конверсія падає в ОБОХ групах</h2>
     <div class="chartbox"><canvas id="convChart"></canvas></div>
-    <div class="cap">Якби винна була персоналізація — просів би лише тест. Обидві групи втратили ~30% з 36 тижня (перший тиждень після прильоту). Це ринковий ефект дефіциту.</div>
+    <div class="cap">Контроль не має персональних цін, але просів так само (−32%). Отже базове падіння — дефіцит товару після прильоту, а не персоналізація. Це «спільна» частина спаду.</div>
   </div>
   <div class="card">
-    <h2>Дод. обіг падає слідом за асортиментом</h2>
-    <div class="chartbox"><canvas id="baseChart"></canvas></div>
-    <div class="cap">База SKU, які тест міг переоцінити, обвалилася з ~64.8к до 41.4к (тижд. 38) і 24.2к (тижд. 39). Разом з нею вдвічі скоротився додатковий обіг.</div>
+    <h2>2. Наш фактор: стеля знижки та реакція дод. обігу</h2>
+    <div class="chartbox"><canvas id="discChart"></canvas></div>
+    <div class="cap">Реаліз. знижка впала з ~5% до ~3.3% рівно з 3.09 (стеля 5%) і повернулась з 15.09 (стеля 7%). Дод. обіг просів слідом; після 15.09 пішов у мінус 17–18.09 — MAB перевідкриває оптимальні «ручки» цін після зміни стелі.</div>
   </div>
 </section>
 
 <div class="hl">
-  <b>Сигнал, на який варто дивитись:</b> середній чек контролю росте (9 069 ₴, +12%) при падінні конверсії.
-  Це класична ознака <b>зсуву асортименту в дорогий сегмент</b> — дешеві та ходові позиції розкупили і не поповнили,
-  на сайті лишилось дорожче й менш еластичне. На такому міксі знижка слабше рухає конверсію, а інкремент від персональної ціни падає.
+  <b>Чому інкремент, а не лише ринок:</b> додатковий обіг рахується як <b>тест мінус контроль</b>, тобто спільний ринковий удар з нього вже вирахувано.
+  Його падіння −38% — це саме те, що втратила персоналізація понад ринок. І воно збігається зі зниженням стелі та двома переучуваннями MAB, а не з датою прильоту.
 </div>
 
 <section>
-  <h2>Три причини, підкріплені цифрами</h2>
+  <h2>Причини за пріоритетом впливу на інкремент</h2>
   <ul class="causes">
-    <li><b>Конверсія впала однаково в тесті й контролі</b> (−28% vs −32%). Ефект ринковий — товару немає, а не «поганий» алгоритм.</li>
-    <li><b>Мікс зсунувся в дорогі позиції</b> — середній чек контролю на піку (9 069 ₴). Ходові еластичні SKU вимело зі складів; лишилось менш чутливе до знижки.</li>
-    <li><b>База для персоналізації обвалилася</b> — 64.8к → 41.4к SKU. Персональна ціна дає інкремент саме на ходових товарах, яких не стало. Тому дод. обіг 15 → 6.8 млн ₴.</li>
+    <li class="ctrl"><b>Зниження стелі знижки 10%→5% з 3 вересня</b> <span class="tag tag-ctrl">керований нами</span> — реалізована середня знижка ПЦ впала ~5% → ~3.3% (−35%). Слабший ціновий стимул прямо зменшує приріст конверсії й дод. обіг.</li>
+    <li class="ctrl"><b>Переучування MAB LinTS після кожної зміни стелі</b> <span class="tag tag-ctrl">керований нами</span> — бандит перевідкриває простір цінових «ручок» при зміні дій. Дві зміни за 12 днів (3.09, 15.09) = дві фази експлорації. Звідси провали й навіть мінусовий дод. обіг 17–18.09 одразу після підняття до 7%.</li>
+    <li class="ext"><b>Дефіцит товару після прильоту 27.08</b> <span class="tag tag-ext">зовнішній</span> — асортимент на сайті 240к→65к. Персоналізація діє лише на типи PUSH/SPUSH; коли ходові позиції цих типів у розборі, немає на чому давати інкремент.</li>
+    <li class="ext"><b>Зсув міксу в дороге</b> <span class="tag tag-ext">зовнішній</span> — середній чек контролю на піку (9 069 ₴, +12%). Лишились менш еластичні позиції, де знижка слабше рухає конверсію.</li>
   </ul>
 </section>
 
@@ -123,21 +142,30 @@
   <h2>Динаміка по тижнях <small>тест / контроль</small></h2>
   <div class="card" style="padding:0 4px">
   <table>
-    <thead><tr><th>Тиждень</th><th>Конв. тест</th><th>Конв. контр.</th><th>Сер. чек контр., ₴</th><th>Дод. обіг тест, млн ₴</th><th>SKU персон.</th></tr></thead>
+    <thead><tr><th>Тиждень</th><th>Конв. тест</th><th>Конв. контр.</th><th>Сер. чек контр., ₴</th><th>Дод. обіг тест, млн ₴</th><th>Реаліз. знижка ПЦ</th></tr></thead>
     <tbody id="tbody"></tbody>
   </table>
   </div>
 </section>
 
+<div class="method">
+  <b>Методологія та застереження.</b> Персональні ціни працюють лише на товари типів <b>PUSH/SPUSH</b>, тож «покриття всього асортименту» тут не застосовне —
+  база вужча за весь каталог. Реалізована знижка порахована по фактичних продажах (<code>items.abatements.is_personal_price</code>, канал INTERNET, статус SOLD) і підтверджує обидві дати зміни стелі.
+  Дод. обіг — інкремент тесту над контролем (нетить спільний ринковий шок). Кількість SKU персоналізації тут не виноситься як драйвер: її зміна в середині вересня збігається зі зміною стелі/конфігом і потребує окремої перевірки (склад vs скоуп PUSH/SPUSH).
+</div>
+
 <div class="concl">
-  <b>Для правління:</b> персоналізація не «зламалася» — у неї зник робочий інвентар. Відновлення метрик тесту
-  прямо залежить від поповнення складів, а не від налаштувань моделі. Поки асортимент звужений і зміщений
-  у дорогий сегмент, конверсія й додатковий обіг залишатимуться пригніченими в обох групах.
+  <b>Для правління.</b> Персоналізація не «зламалася». Спад вересня — це:
+  <ul>
+    <li><b>Ринок (обидві групи):</b> дефіцит товару після прильоту — не відновиться без поповнення складів.</li>
+    <li><b>Наш інкремент (тест понад контроль):</b> просів через зниження стелі знижки та подвійне переучування MAB — це ми контролюємо.</li>
+  </ul>
+  Важелі розвороту: зафіксувати стелю знижки й <b>не смикати її</b>, дати LinTS зійтися (1–2 тижні без змін), і сфокусувати ПЦ на наявних PUSH/SPUSH-позиціях. Реставрація метрик до рівня серпня додатково впирається в поповнення складів.
 </div>
 
 <footer>
-  Прильот по складу — 27.08 (кінець 35 тижня). Джерела: файли кліку по test/control групах;
-  <code>ucp-data.marketing_analytics.t_pp_dashboard</code> (кількість SKU персоналізації). Тижні 31 та 39 можуть бути частково неповними.
+  Прильот по складу — 27.08 (кінець 35 тижня). Стеля знижки: 10%→5% з 03.09, →7% з 15.09. MAB LinTS, товари PUSH/SPUSH.
+  Джерела: файли кліку по test/control групах; <code>comfy-ua-1296.ucp.sales</code> (реаліз. знижка ПЦ); <code>ucp-data.marketing_analytics.t_pp_dashboard</code>. Тижні 32 та 39 можуть бути частково неповними.
 </footer>
 </div>
 
@@ -146,9 +174,14 @@
 var weeks=[32,33,34,35,36,37,38,39];
 var convTest=[2.83,2.44,2.62,2.67,2.01,1.88,1.89,1.82];
 var convCtrl=[2.46,2.09,2.10,2.29,1.72,1.72,1.53,1.48];
-var addTurn=[16.51,15.60,15.61,12.58,12.88,8.74,6.79,8.88];
-var skus=[63693,64881,64630,61915,54661,55828,41354,24183];
+var addTurnW=[16.51,15.60,15.61,12.58,12.88,8.74,6.79,8.88];
 var ckCtrl=[7966,8379,8087,8158,8457,7863,9069,7570];
+var discW=[5.0,5.0,5.0,5.0,3.4,3.5,4.7,5.0]; // реаліз. знижка ~ по тижнях
+
+// daily (Sep 1..27)
+var days=['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27'];
+var discD=[4.81,5.11,3.52,2.94,3.22,3.18,3.25,3.48,3.42,3.33,3.57,3.64,3.61,4.16,4.98,5.29,4.95,4.82,4.56,4.91,4.85,5.01,5.25,4.82,4.98,5.18,4.97];
+var addD=[2.25,1.65,0.94,1.83,1.50,2.53,0.87,2.47,1.05,0.38,0.98,1.44,1.55,2.43,1.86,1.39,-0.76,-0.37,1.43,0.81,2.15,1.92,1.30,0.13,0.73,1.74,0.91];
 
 // table
 document.getElementById('tbody').innerHTML=weeks.map(function(w,i){
@@ -157,23 +190,17 @@ document.getElementById('tbody').innerHTML=weeks.map(function(w,i){
     +'<td>'+convTest[i].toFixed(2)+'%</td>'
     +'<td>'+convCtrl[i].toFixed(2)+'%</td>'
     +'<td>'+ckCtrl[i].toLocaleString('uk-UA').replace(/,/g,' ')+'</td>'
-    +'<td>'+addTurn[i].toFixed(1)+'</td>'
-    +'<td>'+skus[i].toLocaleString('uk-UA').replace(/,/g,' ')+'</td></tr>';
+    +'<td>'+addTurnW[i].toFixed(1)+'</td>'
+    +'<td>~'+discW[i].toFixed(1)+'%</td></tr>';
 }).join('');
 
-var strikeLine={
-  id:'strike',
-  afterDraw:function(c){
-    var x=c.scales.x.getPixelForValue(3); // week 35 index
-    var ya=c.chartArea;
-    var ctx=c.ctx; ctx.save();
-    ctx.strokeStyle='#cf222e'; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(x,ya.top); ctx.lineTo(x,ya.bottom); ctx.stroke();
-    ctx.setLineDash([]); ctx.fillStyle='#cf222e'; ctx.font='11px sans-serif';
-    ctx.fillText('⚡ прильот 27.08', x+5, ya.top+12);
-    ctx.restore();
-  }
-};
+var strikeLineWeek={id:'sw',afterDraw:function(c){
+  var x=c.scales.x.getPixelForValue(3); var ya=c.chartArea; var ctx=c.ctx; ctx.save();
+  ctx.strokeStyle='#cf222e'; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(x,ya.top); ctx.lineTo(x,ya.bottom); ctx.stroke();
+  ctx.setLineDash([]); ctx.fillStyle='#cf222e'; ctx.font='11px sans-serif';
+  ctx.fillText('⚡ прильот 27.08', x+5, ya.top+12); ctx.restore();
+}};
 
 new Chart(document.getElementById('convChart'),{
   type:'line',
@@ -187,22 +214,37 @@ new Chart(document.getElementById('convChart'),{
       tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y.toFixed(2)+'%';}}}},
     scales:{y:{title:{display:true,text:'Конверсія, %',color:'#5c6672'},grid:{color:'#eef1f4'},ticks:{color:'#5c6672'}},
             x:{grid:{display:false},ticks:{color:'#5c6672'}}}},
-  plugins:[strikeLine]
+  plugins:[strikeLineWeek]
 });
 
-new Chart(document.getElementById('baseChart'),{
-  data:{labels:weeks.map(function(w){return 'тижд '+w;}),
+var capLines={id:'cap',afterDraw:function(c){
+  var ya=c.chartArea; var ctx=c.ctx;
+  [[2,'↓ стеля 5% (3.09)','#cf222e'],[14,'↑ стеля 7% (15.09)','#1a7f37']].forEach(function(m){
+    var x=c.scales.x.getPixelForValue(m[0]); ctx.save();
+    ctx.strokeStyle=m[2]; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(x,ya.top); ctx.lineTo(x,ya.bottom); ctx.stroke();
+    ctx.setLineDash([]); ctx.fillStyle=m[2]; ctx.font='10.5px sans-serif';
+    ctx.fillText(m[1], x+4, ya.top+12); ctx.restore();
+  });
+}};
+
+new Chart(document.getElementById('discChart'),{
+  data:{labels:days,
     datasets:[
-     {type:'bar',label:'Дод. обіг тесту, млн ₴',data:addTurn,backgroundColor:'#0969da55',borderColor:'#0969da',borderWidth:1,yAxisID:'y',order:2},
-     {type:'line',label:'SKU для персоналізації, тис.',data:skus.map(function(v){return v/1000;}),borderColor:'#cf222e',backgroundColor:'#cf222e',tension:.25,borderWidth:2.5,pointRadius:3,yAxisID:'y1',order:1}
+     {type:'bar',label:'Дод. обіг тесту, млн ₴',data:addD,yAxisID:'y',order:2,
+       backgroundColor:addD.map(function(v){return v<0?'#cf222e88':'#0969da55';}),
+       borderColor:addD.map(function(v){return v<0?'#cf222e':'#0969da';}),borderWidth:1},
+     {type:'line',label:'Реаліз. знижка ПЦ, %',data:discD,borderColor:'#8250df',backgroundColor:'#8250df',
+       tension:.25,borderWidth:2.5,pointRadius:2,yAxisID:'y1',order:1}
     ]},
   options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},
+    plugins:{legend:{labels:{boxWidth:12,font:{size:11}}},
+      tooltip:{callbacks:{title:function(t){return t[0].label+'.09';}}}},
     scales:{
       y:{position:'left',title:{display:true,text:'Дод. обіг, млн ₴',color:'#0969da'},grid:{color:'#eef1f4'},ticks:{color:'#5c6672'}},
-      y1:{position:'right',title:{display:true,text:'SKU, тис.',color:'#cf222e'},grid:{display:false},ticks:{color:'#5c6672'}},
-      x:{grid:{display:false},ticks:{color:'#5c6672'}}}},
-  plugins:[strikeLine]
+      y1:{position:'right',min:0,max:6,title:{display:true,text:'Знижка, %',color:'#8250df'},grid:{display:false},ticks:{color:'#5c6672'}},
+      x:{grid:{display:false},ticks:{color:'#5c6672',maxRotation:0,autoSkip:true,maxTicksLimit:10}}}},
+  plugins:[capLines]
 });
 })();
 </script>
